@@ -79,3 +79,125 @@ sudo systemctl stop nginx
 ```
 sudo systemctl restart nginx
 ```
+
+Bạn cũng có thể reload lại Nginx mà không làm gián đoạn kết nối:
+```
+sudo systemctl reload nginx
+```
+
+Theo mặc định, Nginx được định cấu hình để khởi động tự động khi máy chủ khởi động. Nếu muốn, bạn có thể bằng cách:
+```
+sudo systemctl disable nginx
+```
+
+Để bật lại service khởi động khi server được khởi động:
+```
+sudo systemctl enable nginx
+```
+
+NGINX thường được cài đặt trên thư mục /etc/nginx và phần lớn công việc của chúng ta trong các phần sắp tới sẽ được thực hiện tại đây.
+
+
+## Tìm hiểu về config file NGINX
+
+Là một máy chủ web, công việc của NGINX là cung cấp nội dung tĩnh hoặc động cho các máy khách. Nhưng nội dung đó sẽ được phân phát như thế nào thường được kiểm soát bởi các tệp cấu hình.
+
+![image](https://user-images.githubusercontent.com/51064915/183942886-9b7c0da6-b40b-4254-9170-4002bcc94245.png)
+
+Trong số các tệp trên, có một tệp có tên là nginx.conf . Đây là tệp cấu hình chính cho NGINX. Bạn có thể xem nội dung của tệp này:
+
+```
+$ cat nginx.conf
+
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+	worker_connections 768;
+	# multi_accept on;
+}
+
+http {
+
+	##
+	# Basic Settings
+	##
+
+	sendfile on;
+	tcp_nopush on;
+	tcp_nodelay on;
+	keepalive_timeout 65;
+	types_hash_max_size 2048;
+	# server_tokens off;
+
+	# server_names_hash_bucket_size 64;
+	# server_name_in_redirect off;
+    include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+
+	##
+	# SSL Settings
+	##
+
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; # Dropping SSLv3, ref: POODLE
+	ssl_prefer_server_ciphers on;
+
+	##
+	# Logging Settings
+	##
+
+	access_log /var/log/nginx/access.log;
+	error_log /var/log/nginx/error.log;
+
+	##
+	# Gzip Settings
+	##
+
+	gzip on;
+    # gzip_vary on;
+	# gzip_proxied any;
+	# gzip_comp_level 6;
+	# gzip_buffers 16 8k;
+	# gzip_http_version 1.1;
+	# gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+	##
+	# Virtual Host Configs
+	##
+
+	include /etc/nginx/conf.d/*.conf;
+	include /etc/nginx/sites-enabled/*;
+}
+
+
+#mail {
+#	# See sample authentication script at:
+#	# http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
+# 
+#	# auth_http localhost/auth.php;
+#	# pop3_capabilities "TOP" "USER";
+#	# imap_capabilities "IMAP4rev1" "UIDPLUS";
+# 
+#	server {
+#		listen     localhost:110;
+#		protocol   pop3;
+#		proxy      on;
+#	}
+server {
+#		listen     localhost:143;
+#		protocol   imap;
+#		proxy      on;
+#	}
+```
+
+Có thể thấy nội dung trong file ban đầu rất nhiều và để có thể hiểu được chi tiết chúng ta cần chuyển nội dung trang sang một file khác và thực hiện tìm hiểu để biết được hết nội dung file
+
+```
+$ sudo mv nginx.conf nginx.conf.back
+$ sudo touch nginx.conf
+```
+
+
+
