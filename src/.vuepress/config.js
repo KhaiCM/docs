@@ -4,7 +4,7 @@ module.exports = {
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#title
    */
-  title: 'Vuepress Docs Boilerplate',
+  title: 'Docs KhaiCM',
   /**
    * Ref：https://v1.vuepress.vuejs.org/config/#description
    */
@@ -33,6 +33,10 @@ module.exports = {
     editLinkText: '',
     lastUpdated: false,
     nav: [
+      {
+        text: 'Training',
+        link: '/training/',
+      },
       {
         text: 'Guide',
         link: '/guide/',
